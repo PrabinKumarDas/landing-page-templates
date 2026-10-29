@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Next-Gen Digital Experience</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Glassmorphism & Visual Styles */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.25) 0%, rgba(15, 23, 42, 0) 70%);
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Modal Animation */
+        .modal-enter {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        .modal-enter-active {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 300ms ease-out, transform 300ms ease-out;
+        }
+        .modal-exit-active {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 200ms ease-in, transform 200ms ease-in;
+        }
+
+        /* Animated Blob Background Elements */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .floating-blob-1 {
+            animation: float 8s infinite ease-in-out;
+        }
+        .floating-blob-2 {
+            animation: float 10s infinite ease-in-out -4s;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+
+    <!-- Background Decorative Blobs -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none floating-blob-1"></div>
+    <div class="fixed top-1/3 right-10 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl pointer-events-none floating-blob-2"></div>
+
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 w-full z-40 glass-nav transition-all duration-300" id="header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="#" class="flex items-center gap-2 group">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform">
+                            N
+                        </div>
+                        <span class="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+                            NEXUS<span class="text-indigo-500">.</span>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="#home" class="px-4 py-2 text-sm font-medium text-slate-200 hover:text-indigo-400 rounded-lg hover:bg-white/5 transition-all">Home</a>
+                    <a href="#features" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-indigo-400 rounded-lg hover:bg-white/5 transition-all">Features</a>
+                    <a href="#pricing" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-indigo-400 rounded-lg hover:bg-white/5 transition-all">Pricing</a>
+                    <a href="#about" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-indigo-400 rounded-lg hover:bg-white/5 transition-all">About</a>
+                    <a href="#contact" class="px-4 py-2 text-sm font-medium text-slate-300 hover:text-indigo-400 rounded-lg hover:bg-white/5 transition-all">Contact</a>
+                </nav>
+
+                <!-- Action Buttons -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button onclick="openModal('login')" class="text-sm font-semibold text-slate-200 hover:text-white px-4 py-2 rounded-lg hover:bg-white/5 transition-all">
+                        Log In
+                    </button>
+                    <button onclick="openModal('signup')" class="text-sm font-semibold text-white bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all active:translate-y-0">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="p-2.5 rounded-xl text-slate-300 hover:text-white hover:bg-white/10 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-6 space-y-2">
+            <a href="#home" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-200 hover:bg-white/5 hover:text-indigo-400">Home</a>
+            <a href="#features" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-white/5 hover:text-indigo-400">Features</a>
+            <a href="#pricing" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-white/5 hover:text-indigo-400">Pricing</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-white/5 hover:text-indigo-400">About</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block px-4 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:bg-white/5 hover:text-indigo-400">Contact</a>
+            
+            <div class="pt-4 border-t border-slate-800 flex flex-col gap-2">
+                <button onclick="openModal('login'); toggleMobileMenu();" class="w-full text-center py-2.5 rounded-xl text-slate-200 hover:bg-white/5 font-semibold text-sm">
+                    Log In
+                </button>
+                <button onclick="openModal('signup'); toggleMobileMenu();" class="w-full text-center py-2.5 rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 font-semibold text-sm shadow-md">
+                    Get Started Free
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-20">
+        
+        <!-- Hero Section -->
+        <section id="home" class="relative pt-24 pb-20 md:pt-32 md:pb-32 hero-gradient overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs sm:text-sm font-semibold mb-8 backdrop-blur-md">
+                    <span class="flex h-2 w-2 rounded-full bg-indigo-400 animate-ping"></span>
+                    <span>Introducing Nexus v2.0 Platform</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </div>
+
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-tight max-w-5xl mx-auto">
+                    Power Your Workflow with <br class="hidden sm:inline">
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                        Intelligent Automation
+                    </span>
+                </h1>
+
+                <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto font-normal">
+                    Streamline operations, scale modern cloud architectures, and unlock real-time intelligence with our next-generation enterprise API framework.
+                </p>
+
+                <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="openModal('signup')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-base shadow-xl shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5 transition-all">
+                        Start 14-Day Free Trial
+                    </button>
+                    <a href="#features" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white font-semibold text-base transition-all flex items-center justify-center gap-2">
+                        <i class="fa-regular fa-circle-play text-indigo-400"></i>
+                        Explore Features
+                    </a>
+                </div>
+
+                <!-- Feature Badges -->
+                <div class="mt-16 pt-12 border-t border-slate-800/80 grid grid-cols-2 md:grid-cols-4 gap-6 text-slate-400 text-sm">
+                    <div class="flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-indigo-400"></i>
+                        <span>SOC2 Type II Certified</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-bolt text-indigo-400"></i>
+                        <span>99.99% Uptime SLA</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-globe text-indigo-400"></i>
+                        <span>Global Edge Network</span>
+                    </div>
+                    <div class="flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-headset text-indigo-400"></i>
+                        <span>24/7 Dedicated Support</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="py-24 bg-slate-900/50 relative border-t border-b border-slate-800/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase font-bold tracking-widest text-indigo-400 mb-2">Capabilities</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Engineered for High-Scale Innovation</p>
+                    <p class="mt-4 text-slate-400">Everything you need to deploy, monitor, and optimize your modern cloud infrastructure.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 hover:border-indigo-500/50 transition-all duration-300 group hover:-translate-y-1">
+                        <div class="w-14 h-14 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Real-time Telemetry</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Monitor performance metrics with sub-millisecond precision using distributed tracing and live telemetry pipelines.
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 hover:border-purple-500/50 transition-all duration-300 group hover:-translate-y-1">
+                        <div class="w-14 h-14 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-purple-600 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Zero-Trust Security</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            End-to-end encryption, automated compliance checks, and granular access control built into every layer.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 hover:border-pink-500/50 transition-all duration-300 group hover:-translate-y-1">
+                        <div class="w-14 h-14 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 group-hover:bg-pink-600 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">AI Automation</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Leverage embedded machine learning models to predict resource bottlenecks and dynamically autoscale workloads.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section id="pricing" class="py-24 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase font-bold tracking-widest text-indigo-400 mb-2">Transparent Pricing</h2>
+                    <p class="text-3xl sm:text-4xl font-extrabold text-white">Choose the Right Plan for Growth</p>
+                    <p class="mt-4 text-slate-400">Simple, predictable pricing with no hidden bandwidth charges.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-3 gap-8 items-stretch">
+                    
+                    <!-- Starter Plan -->
+                    <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-300">Starter</h3>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-4xl font-extrabold text-white">$29</span>
+                                <span class="text-slate-400 text-sm">/month</span>
+                            </div>
+                            <p class="mt-3 text-slate-400 text-sm">Essential tools for individual developers and small side projects.</p>
+                            
+                            <ul class="mt-8 space-y-4 text-sm text-slate-300">
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Up to 5 Active Workspaces
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> 10GB Telemetry Storage
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Community Support
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <button onclick="openModal('signup')" class="mt-8 w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition-all">
+                            Start Free Trial
+                        </button>
+                    </div>
+
+                    <!-- Pro Plan (Featured) -->
+                    <div class="p-8 rounded-2xl bg-slate-900 border-2 border-indigo-500 shadow-2xl shadow-indigo-500/10 flex flex-col justify-between relative">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-500 text-white text-xs font-bold rounded-full uppercase tracking-wider">
+                            Most Popular
+                        </div>
+
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-400">Pro Team</h3>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-4xl font-extrabold text-white">$89</span>
+                                <span class="text-slate-400 text-sm">/month</span>
+                            </div>
+                            <p class="mt-3 text-slate-400 text-sm">Ideal for growing tech teams requiring advanced analytics and scale.</p>
+                            
+                            <ul class="mt-8 space-y-4 text-sm text-slate-300">
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Unlimited Workspaces
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> 500GB Telemetry Storage
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> AI Auto-scaling Rules
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Priority 24/7 Email & Chat
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <button onclick="openModal('signup')" class="mt-8 w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-500/25 transition-all">
+                            Get Started Now
+                        </button>
+                    </div>
+
+                    <!-- Enterprise Plan -->
+                    <div class="p-8 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-300">Enterprise</h3>
+                            <div class="mt-4 flex items-baseline gap-1">
+                                <span class="text-4xl font-extrabold text-white">Custom</span>
+                            </div>
+                            <p class="mt-3 text-slate-400 text-sm">Custom dedicated cloud deployment and white-glove onboarding.</p>
+                            
+                            <ul class="mt-8 space-y-4 text-sm text-slate-300">
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Dedicated Private Clusters
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Unlimited Retention
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Dedicated Solutions Architect
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <i class="fa-solid fa-check text-indigo-400"></i> Custom SLA Guarantees
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <a href="#contact" class="mt-8 w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm transition-all text-center block">
+                            Contact Sales
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-24 bg-slate-900/50 border-t border-slate-800/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-xs uppercase font-bold tracking-widest text-indigo-400 mb-2">Our Mission</h2>
+                        <h3 class="text-3xl sm:text-4xl font-extrabold text-white mb-6">Building the Future of Cloud Infrastructure</h3>
+                        <p class="text-slate-400 text-base leading-relaxed mb-6">
+                            Founded in 2024, Nexus was created to solve the complexities of modern cloud scaling. We believe developers should spend less time managing complex operations and more time crafting transformative user experiences.
+                        </p>
+                        <div class="grid grid-cols-2 gap-6 pt-4">
+                            <div>
+                                <p class="text-3xl font-extrabold text-indigo-400">10M+</p>
+                                <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">API Calls Daily</p>
+                            </div>
+                            <div>
+                                <p class="text-3xl font-extrabold text-purple-400">99.99%</p>
+                                <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider">Historical Uptime</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="p-8 rounded-2xl bg-gradient-to-tr from-indigo-900/40 to-slate-900 border border-slate-800 shadow-2xl relative z-10">
+                            <div class="space-y-4 font-mono text-xs text-indigo-300">
+                                <p class="text-slate-500">// Initialize Nexus Engine</p>
+                                <p><span class="text-purple-400">import</span> { NexusCluster } <span class="text-purple-400">from</span> <span class="text-emerald-400">'@nexus/core'</span>;</p>
+                                <p><span class="text-purple-400">const</span> cluster = <span class="text-purple-400">new</span> NexusCluster({</p>
+                                <p class="pl-4">region: <span class="text-emerald-400">'global-edge'</span>,</p>
+                                <p class="pl-4">autoScale: <span class="text-amber-400">true</span>,</p>
+                                <p class="pl-4">security: <span class="text-emerald-400">'zero-trust'</span></p>
+                                <p>});</p>
+                                <p class="pt-2 text-slate-400">await cluster.deploy();</p>
+                                <p class="text-emerald-400">> Cluster online. All nodes active.</p>
+                            </div>
+                        </div>
+                        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl blur-lg opacity-20"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 relative">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-xs uppercase font-bold tracking-widest text-indigo-400 mb-2">Get in Touch</h2>
+                <p class="text-3xl sm:text-4xl font-extrabold text-white mb-8">We'd Love to Hear From You</p>
+                
+                <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-6 text-left bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl">
+                    <div class="grid sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Full Name</label>
+                            <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Work Email</label>
+                            <input type="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors" placeholder="john@company.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Message</label>
+                        <textarea rows="4" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 transition-colors" placeholder="Tell us about your project..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-base shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 transition-all">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-12 text-slate-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-bold text-xs">N</div>
+                <span class="text-white font-semibold">NEXUS Platform</span>
+            </div>
+            
+            <p>&copy; 2026 NEXUS Technologies Inc. All rights reserved.</p>
+
+            <div class="flex items-center space-x-6 text-slate-400">
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-twitter text-lg"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github text-lg"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-discord text-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Authentication Modal (Login / Sign Up) -->
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        
+        <div id="modal-container" class="relative w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 sm:p-8 transform scale-95 transition-transform duration-300">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-lg hover:bg-white/5 transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Modal Header / Tabs -->
+            <div class="flex items-center border-b border-slate-800 mb-6">
+                <button id="tab-login" onclick="switchTab('login')" class="flex-1 pb-3 text-center text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-all">
+                    Log In
+                </button>
+                <button id="tab-signup" onclick="switchTab('signup')" class="flex-1 pb-3 text-center text-sm font-bold text-slate-400 border-b-2 border-transparent hover:text-slate-200 transition-all">
+                    Sign Up
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="form-login" onsubmit="handleAuthSubmit(event, 'Login')" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Email Address</label>
+                    <input type="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors" placeholder="user@domain.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Password</label>
+                    <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors" placeholder="••••••••">
+                </div>
+                <div class="flex items-center justify-between text-xs text-slate-400">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" class="rounded bg-slate-950 border-slate-800 text-indigo-500 focus:ring-0">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="text-indigo-400 hover:underline">Forgot Password?</a>
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-500/25 transition-all mt-2">
+                    Sign In to Account
+                </button>
+            </form>
+
+            <!-- Sign Up Form (Hidden by default) -->
+            <form id="form-signup" onsubmit="handleAuthSubmit(event, 'Registration')" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Full Name</label>
+                    <input type="text" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors" placeholder="Jane Doe">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Work Email</label>
+                    <input type="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors" placeholder="jane@company.com">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1">Password</label>
+                    <input type="password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-200 text-sm focus:outline-none focus:border-indigo-500 transition-colors" placeholder="••••••••">
+                </div>
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-500/25 transition-all mt-2">
+                    Create Free Account
+                </button>
+            </form>
+
+            <!-- Social Auth Divider -->
+            <div class="mt-6 border-t border-slate-800 pt-6 text-center">
+                <p class="text-xs text-slate-500 mb-4 uppercase tracking-wider">Or continue with</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <button class="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold transition-all">
+                        <i class="fa-brands fa-github text-sm"></i> GitHub
+                    </button>
+                    <button class="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 text-xs font-semibold transition-all">
+                        <i class="fa-brands fa-google text-sm"></i> Google
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-indigo-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toast-msg" class="text-sm font-medium">Notification message</span>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+
+        function toggleMobileMenu() {
+            mobileMenu.classList.toggle('hidden');
+            if (mobileMenu.classList.contains('hidden')) {
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            } else {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            }
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+        // Modal Controls
+        const authModal = document.getElementById('auth-modal');
+        const modalContainer = document.getElementById('modal-container');
+
+        function openModal(mode) {
+            switchTab(mode);
+            authModal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-95');
+            modalContainer.classList.add('scale-100');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            authModal.classList.add('opacity-0', 'pointer-events-none');
+            modalContainer.classList.remove('scale-100');
+            modalContainer.classList.add('scale-95');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close Modal when clicking background
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                closeModal();
+            }
+        });
+
+        // Modal Tab Switcher
+        function switchTab(mode) {
+            const tabLogin = document.getElementById('tab-login');
+            const tabSignup = document.getElementById('tab-signup');
+            const formLogin = document.getElementById('form-login');
+            const formSignup = document.getElementById('form-signup');
+
+            if (mode === 'login') {
+                tabLogin.className = "flex-1 pb-3 text-center text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-all";
+                tabSignup.className = "flex-1 pb-3 text-center text-sm font-bold text-slate-400 border-b-2 border-transparent hover:text-slate-200 transition-all";
+                formLogin.classList.remove('hidden');
+                formSignup.classList.add('hidden');
+            } else {
+                tabSignup.className = "flex-1 pb-3 text-center text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-all";
+                tabLogin.className = "flex-1 pb-3 text-center text-sm font-bold text-slate-400 border-b-2 border-transparent hover:text-slate-200 transition-all";
+                formSignup.classList.remove('hidden');
+                formLogin.classList.add('hidden');
+            }
+        }
+
+        // Toast Notification Handler
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.textContent = message;
+            
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Form Submission Handlers
+        function handleAuthSubmit(event, type) {
+            event.preventDefault();
+            closeModal();
+            showToast(`${type} successful! Welcome to Nexus.`);
+        }
+
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            event.target.reset();
+            showToast('Thank you! Your message has been sent.');
+        }
+    </script>
+</body>
+</html>

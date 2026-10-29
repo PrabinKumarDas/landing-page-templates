@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA — Studio Essentials & Minimalist Goods</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Base Reset & Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #faf9f6;
+            color: #1a1a1a;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        /* Minimal Transitions & Effects */
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-4px);
+        }
+        .img-zoom-container {
+            overflow: hidden;
+            position: relative;
+        }
+        .img-zoom-container img {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+        .img-zoom-container:hover img {
+            transform: scale(1.06);
+        }
+
+        /* Responsive Layout Grid */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .container { padding: 0 1.25rem; }
+            .desktop-only { display: none !important; }
+            .mobile-menu-btn { display: flex !important; }
+            .grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+            .grid-3 { grid-template-columns: 1fr !important; }
+            .hero-content { padding: 3rem 1.5rem !important; }
+            .quickview-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 580px) {
+            .grid-4 { grid-template-columns: 1fr !important; }
+            .hero-title { font-size: 2.2rem !important; }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf9f6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div style="background-color: #18181b; color: #f4f4f5; text-align: center; padding: 0.55rem 1rem; font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;">
+        Complimentary Express Shipping on Orders Over $150 &nbsp;•&nbsp; Code: <span style="color: #a1a1aa; border-bottom: 1px solid #71717a;">AURA2026</span>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header style="position: sticky; top: 0; z-index: 90; background: rgba(250, 249, 246, 0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.06);">
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between; height: 80px;">
+            
+            <!-- Mobile Menu Toggle Button -->
+            <button class="mobile-menu-btn" onclick="toggleMobileNav()" style="display: none; font-size: 1.2rem; color: #18181b; padding: 0.5rem;" aria-label="Toggle navigation menu">
+                <i class="fa-solid fa-bars-staggered"></i>
+            </button>
+
+            <!-- Brand Logo -->
+            <a href="#" style="display: flex; align-items: center; gap: 0.6rem;">
+                <span style="font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 600; letter-spacing: 0.12em; color: #09090b;">AURA</span>
+                <span style="font-size: 0.65rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; color: #71717a; border-left: 1px solid #d4d4d8; padding-left: 0.6rem;">Studio</span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="desktop-only" style="display: flex; align-items: center; gap: 2.2rem; font-size: 0.88rem; font-weight: 500; letter-spacing: 0.02em;">
+                <a href="#shop" style="color: #27272a; transition: color 0.2s;" onmouseover="this.style.color='#71717a'" onmouseout="this.style.color='#27272a'">Shop All</a>
+                <a href="#categories" style="color: #27272a; transition: color 0.2s;" onmouseover="this.style.color='#71717a'" onmouseout="this.style.color='#27272a'">Collections</a>
+                <a href="#sustainability" style="color: #27272a; transition: color 0.2s;" onmouseover="this.style.color='#71717a'" onmouseout="this.style.color='#27272a'">Sustainability</a>
+                <a href="#journal" style="color: #27272a; transition: color 0.2s;" onmouseover="this.style.color='#71717a'" onmouseout="this.style.color='#27272a'">Journal</a>
+            </nav>
+
+            <!-- Navigation Controls & Actions -->
+            <div style="display: flex; align-items: center; gap: 1.25rem;">
+                
+                <!-- Search Trigger -->
+                <button onclick="toggleSearchModal()" style="font-size: 1rem; color: #27272a; padding: 0.4rem; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.6'" onmouseout="this.style.opacity='1'" aria-label="Search items">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+                <!-- Login Trigger -->
+                <button onclick="openLoginModal()" style="font-size: 0.85rem; font-weight: 500; color: #18181b; background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.08); padding: 0.5rem 1rem; border-radius: 40px; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem;" onmouseover="this.style.background='#18181b'; this.style.color='#fff';" onmouseout="this.style.background='rgba(0,0,0,0.04)'; this.style.color='#18181b';">
+                    <i class="fa-regular fa-user" style="font-size: 0.8rem;"></i>
+                    <span class="desktop-only">Sign In</span>
+                </button>
+
+                <!-- Shopping Cart Icon with Badge -->
+                <button onclick="openCartDrawer()" style="position: relative; font-size: 1.1rem; color: #18181b; padding: 0.4rem;" aria-label="View shopping cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cartBadgeCount" style="position: absolute; top: -2px; right: -4px; background-color: #18181b; color: #ffffff; font-size: 0.65rem; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s;">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobileNavDrawer" style="display: none; background: #faf9f6; border-top: 1px solid #e4e4e7; padding: 1.5rem; flex-direction: column; gap: 1.2rem; font-size: 0.95rem; font-weight: 500;">
+            <a href="#shop" onclick="toggleMobileNav()" style="color: #18181b;">Shop All</a>
+            <a href="#categories" onclick="toggleMobileNav()" style="color: #18181b;">Collections</a>
+            <a href="#sustainability" onclick="toggleMobileNav()" style="color: #18181b;">Sustainability</a>
+            <a href="#journal" onclick="toggleMobileNav()" style="color: #18181b;">Journal</a>
+        </div>
+    </header>
+
+    <!-- Search Overlay Box -->
+    <div id="searchModal" style="display: none; position: fixed; inset: 0; z-index: 200; background: rgba(250, 249, 246, 0.96); backdrop-filter: blur(10px); padding: 2rem; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 6rem;">
+        <button onclick="toggleSearchModal()" style="position: absolute; top: 2rem; right: 2rem; font-size: 1.5rem; color: #18181b; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        <div style="width: 100%; max-width: 600px; position: relative;">
+            <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="Search minimalist essentials..." style="width: 100%; font-family: inherit; font-size: 1.5rem; background: transparent; border: none; border-bottom: 2px solid #18181b; padding: 0.75rem 0; outline: none; color: #18181b;">
+            <i class="fa-solid fa-magnifying-glass" style="position: absolute; right: 0; top: 1rem; font-size: 1.3rem; color: #71717a;"></i>
+        </div>
+        <div id="searchResults" style="width: 100%; max-width: 600px; margin-top: 2rem; display: flex; flex-direction: column; gap: 1rem; max-height: 50vh; overflow-y: auto;">
+            <p style="color: #71717a; font-size: 0.9rem;">Start typing to search products...</p>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section style="padding: 2.5rem 0 4rem 0;">
+        <div class="container">
+            <div style="position: relative; border-radius: 24px; overflow: hidden; min-height: 540px; display: flex; align-items: center; background: #000;">
+                <!-- Hero Image Background with Low Opacity Overlay -->
+                <img src="https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1600&q=80" alt="AURA Modern Interior Essentials" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.65; filter: contrast(105%);">
+                
+                <!-- Hero Content -->
+                <div class="hero-content" style="position: relative; z-index: 2; padding: 5rem 4rem; max-width: 640px; color: #ffffff;">
+                    <span style="display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase; background: rgba(255,255,255,0.18); backdrop-filter: blur(8px); padding: 0.35rem 0.9rem; border-radius: 30px; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.25);">
+                        Edition 04 — Essential Objects
+                    </span>
+                    <h1 class="hero-title" style="font-family: 'Playfair Display', serif; font-size: 3.4rem; font-weight: 500; line-height: 1.15; margin-bottom: 1.25rem; letter-spacing: -0.01em;">
+                        Designed for Purpose &amp; Serenity.
+                    </h1>
+                    <p style="font-size: 1.05rem; font-weight: 300; line-height: 1.7; color: #e4e4e7; margin-bottom: 2.2rem;">
+                        Curated collection of tactile home objects, minimal workspace accessories, and organic apparel crafted with sustainable precision.
+                    </p>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="#shop" style="display: inline-flex; align-items: center; gap: 0.6rem; background: #ffffff; color: #09090b; padding: 0.9rem 2rem; border-radius: 40px; font-weight: 600; font-size: 0.9rem; transition: all 0.25s ease;" onmouseover="this.style.background='#f4f4f5'; this.style.transform='scale(1.02)';" onmouseout="this.style.background='#ffffff'; this.style.transform='scale(1)';">
+                            Explore Collection <i class="fa-solid fa-arrow-right-long" style="font-size: 0.85rem;"></i>
+                        </a>
+                        <a href="#sustainability" style="display: inline-flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: #ffffff; padding: 0.9rem 1.8rem; border-radius: 40px; font-weight: 500; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.3); transition: background 0.25s;" onmouseover="this.style.background='rgba(255,255,255,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+                            Our Philosophy
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Value Value Banner / Trust Points -->
+    <section style="border-y: 1px solid #e4e4e7; background: #f4f3ef; padding: 2.2rem 0;">
+        <div class="container">
+            <div class="grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; text-align: center;">
+                <div style="padding: 0.5rem;">
+                    <i class="fa-solid fa-leaf" style="font-size: 1.2rem; color: #52525b; margin-bottom: 0.6rem;"></i>
+                    <h4 style="font-size: 0.9rem; font-weight: 600; color: #18181b;">100% Sustainable</h4>
+                    <p style="font-size: 0.8rem; color: #71717a; margin-top: 0.2rem;">Sourced from ethical artisans globally</p>
+                </div>
+                <div style="padding: 0.5rem;">
+                    <i class="fa-solid fa-truck-ramp-box" style="font-size: 1.2rem; color: #52525b; margin-bottom: 0.6rem;"></i>
+                    <h4 style="font-size: 0.9rem; font-weight: 600; color: #18181b;">Carbon-Neutral Delivery</h4>
+                    <p style="font-size: 0.8rem; color: #71717a; margin-top: 0.2rem;">Eco-friendly plastic-free packaging</p>
+                </div>
+                <div style="padding: 0.5rem;">
+                    <i class="fa-solid fa-rotate-left" style="font-size: 1.2rem; color: #52525b; margin-bottom: 0.6rem;"></i>
+                    <h4 style="font-size: 0.9rem; font-weight: 600; color: #18181b;">30-Day Guarantee</h4>
+                    <p style="font-size: 0.8rem; color: #71717a; margin-top: 0.2rem;">Hassle-free returns &amp; full refunds</p>
+                </div>
+                <div style="padding: 0.5rem;">
+                    <i class="fa-solid fa-award" style="font-size: 1.2rem; color: #52525b; margin-bottom: 0.6rem;"></i>
+                    <h4 style="font-size: 0.9rem; font-weight: 600; color: #18181b;">Lifetime Warranty</h4>
+                    <p style="font-size: 0.8rem; color: #71717a; margin-top: 0.2rem;">Crafted with timeless durability</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Product Catalog Section -->
+    <section id="shop" style="padding: 5rem 0;">
+        <div class="container">
+            
+            <!-- Section Title & Filter Tabs -->
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 3rem;">
+                <span style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #a1a1aa; margin-bottom: 0.5rem;">Curated Inventory</span>
+                <h2 style="font-family: 'Playfair Display', serif; font-size: 2.3rem; font-weight: 500; color: #09090b; margin-bottom: 2rem;">Explore Studio Essentials</h2>
+
+                <!-- Dynamic Category Filter Tabs -->
+                <div id="categories" style="display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: center; background: #f0eee6; padding: 0.35rem; border-radius: 40px; border: 1px solid #e4e4e7;">
+                    <button class="filter-btn active" onclick="filterCategory('all', this)" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; font-weight: 600; border-radius: 30px; background: #18181b; color: #ffffff; transition: all 0.2s;">All Essentials</button>
+                    <button class="filter-btn" onclick="filterCategory('apparel', this)" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; font-weight: 500; border-radius: 30px; background: transparent; color: #52525b; transition: all 0.2s;">Apparel</button>
+                    <button class="filter-btn" onclick="filterCategory('home', this)" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; font-weight: 500; border-radius: 30px; background: transparent; color: #52525b; transition: all 0.2s;">Home &amp; Living</button>
+                    <button class="filter-btn" onclick="filterCategory('workspace', this)" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; font-weight: 500; border-radius: 30px; background: transparent; color: #52525b; transition: all 0.2s;">Workspaces</button>
+                    <button class="filter-btn" onclick="filterCategory('objects', this)" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; font-weight: 500; border-radius: 30px; background: transparent; color: #52525b; transition: all 0.2s;">Tech &amp; Objects</button>
+                </div>
+            </div>
+
+            <!-- Product Grid -->
+            <div id="productGrid" class="grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;">
+                <!-- Product items rendered dynamically via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Editorial / Storytelling Banner -->
+    <section id="sustainability" style="padding: 5rem 0; background: #f0eee6;">
+        <div class="container">
+            <div class="grid-3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+                <div class="img-zoom-container" style="border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06);">
+                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1000&q=80" alt="Ceramic Craftsmanship" style="width: 100%; height: 480px; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div>
+                    <span style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #71717a; display: block; margin-bottom: 0.75rem;">Mindful Craft</span>
+                    <h2 style="font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 500; line-height: 1.25; margin-bottom: 1.5rem; color: #09090b;">
+                        Form Following Function. Reduced to Pure Essence.
+                    </h2>
+                    <p style="color: #52525b; font-size: 0.98rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                        At AURA, we reject disposable trends. Each item is developed through months of iterative refining—balancing raw ceramic, organic cotton, solid walnut, and tactile brushed metals.
+                    </p>
+                    <p style="color: #52525b; font-size: 0.98rem; line-height: 1.8; margin-bottom: 2rem;">
+                        Our partner studios operate exclusively on renewable energy and commit to fair wage standards across every stage of synthesis.
+                    </p>
+                    <div style="display: flex; gap: 2.5rem;">
+                        <div>
+                            <div style="font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; color: #18181b;">100%</div>
+                            <div style="font-size: 0.8rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem;">Recyclable Packaging</div>
+                        </div>
+                        <div>
+                            <div style="font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; color: #18181b;">Zero</div>
+                            <div style="font-size: 0.8rem; color: #71717a; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.2rem;">Micro-Plastic Waste</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Journal / Articles Showcase -->
+    <section id="journal" style="padding: 5rem 0;">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <span style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #a1a1aa; margin-bottom: 0.5rem; display: block;">Perspectives</span>
+                    <h2 style="font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 500; color: #09090b; margin: 0;">The Minimalist Journal</h2>
+                </div>
+                <a href="#" style="font-size: 0.88rem; font-weight: 600; color: #18181b; display: flex; align-items: center; gap: 0.4rem; border-bottom: 1.5px solid #18181b; padding-bottom: 0.2rem;">View All Articles <i class="fa-solid fa-arrow-right-long" style="font-size: 0.75rem;"></i></a>
+            </div>
+
+            <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+                <!-- Journal Item 1 -->
+                <article class="hover-lift" style="background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e4e4e7;">
+                    <div class="img-zoom-container" style="height: 220px;">
+                        <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80" alt="Workspace Setup" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <span style="font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em;">Design Philosophy • Oct 2026</span>
+                        <h3 style="font-size: 1.15rem; font-weight: 600; margin: 0.6rem 0 0.8rem 0; color: #18181b; line-height: 1.35;">Designing a Clutter-Free Mindful Workspace</h3>
+                        <p style="font-size: 0.88rem; color: #71717a; line-height: 1.6; margin-bottom: 1.2rem;">How physical environment simplicity translates to cognitive clarity and deep focused creation.</p>
+                        <a href="#" style="font-size: 0.82rem; font-weight: 600; color: #18181b;">Read Story →</a>
+                    </div>
+                </article>
+
+                <!-- Journal Item 2 -->
+                <article class="hover-lift" style="background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e4e4e7;">
+                    <div class="img-zoom-container" style="height: 220px;">
+                        <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80" alt="Ceramic Vases" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <span style="font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em;">Artisan Spotlight • Sep 2026</span>
+                        <h3 style="font-size: 1.15rem; font-weight: 600; margin: 0.6rem 0 0.8rem 0; color: #18181b; line-height: 1.35;">The Quiet Art of Kyoto Stoneware Crafting</h3>
+                        <p style="font-size: 0.88rem; color: #71717a; line-height: 1.6; margin-bottom: 1.2rem;">Inside the family-run kiln studio preserving 300 years of tactile stoneware mastery.</p>
+                        <a href="#" style="font-size: 0.82rem; font-weight: 600; color: #18181b;">Read Story →</a>
+                    </div>
+                </article>
+
+                <!-- Journal Item 3 -->
+                <article class="hover-lift" style="background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e4e4e7;">
+                    <div class="img-zoom-container" style="height: 220px;">
+                        <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=800&q=80" alt="Organic Cotton Linen" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="padding: 1.5rem;">
+                        <span style="font-size: 0.75rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.05em;">Materials • Aug 2026</span>
+                        <h3 style="font-size: 1.15rem; font-weight: 600; margin: 0.6rem 0 0.8rem 0; color: #18181b; line-height: 1.35;">Why Unbleached Heavyweight Linen Matters</h3>
+                        <p style="font-size: 0.88rem; color: #71717a; line-height: 1.6; margin-bottom: 1.2rem;">Exploring the tactile elegance, cooling properties, and durability of natural linen.</p>
+                        <a href="#" style="font-size: 0.82rem; font-weight: 600; color: #18181b;">Read Story →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #111113; color: #a1a1aa; padding: 5rem 0 2.5rem 0; border-top: 1px solid #27272a;">
+        <div class="container">
+            <div class="grid-4" style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.3fr; gap: 3rem; margin-bottom: 4rem;">
+                
+                <!-- Col 1: Brand Info -->
+                <div>
+                    <a href="#" style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 600; letter-spacing: 0.1em; color: #ffffff; display: block; margin-bottom: 1rem;">AURA</a>
+                    <p style="font-size: 0.88rem; line-height: 1.7; color: #8a8a93; margin-bottom: 1.5rem; max-width: 280px;">
+                        Architectural aesthetics, functional objects, and organic garments designed for timeless living.
+                    </p>
+                    <div style="display: flex; gap: 1.2rem; font-size: 1.1rem; color: #a1a1aa;">
+                        <a href="#" style="transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" style="transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'"><i class="fa-brands fa-pinterest-p"></i></a>
+                        <a href="#" style="transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'"><i class="fa-brands fa-x-twitter"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Navigation -->
+                <div>
+                    <h4 style="color: #ffffff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.2rem;">Explore</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem;">
+                        <a href="#shop" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">New Arrivals</a>
+                        <a href="#shop" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">Best Sellers</a>
+                        <a href="#sustainability" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">Architectural Line</a>
+                        <a href="#journal" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">AURA Journal</a>
+                    </div>
+                </div>
+
+                <!-- Col 3: Assistance -->
+                <div>
+                    <h4 style="color: #ffffff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.2rem;">Client Service</h4>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.88rem;">
+                        <a href="#" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">Order Tracking</a>
+                        <a href="#" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">Shipping &amp; Delivery</a>
+                        <a href="#" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">Care Guidelines</a>
+                        <a href="#" style="color: #a1a1aa; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#a1a1aa'">Contact Concierge</a>
+                    </div>
+                </div>
+
+                <!-- Col 4: Newsletter -->
+                <div>
+                    <h4 style="color: #ffffff; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.2rem;">Join the Collective</h4>
+                    <p style="font-size: 0.85rem; color: #8a8a93; margin-bottom: 1rem;">Subscribe to receive private previews and minimalist living notes.</p>
+                    <form onsubmit="handleNewsletter(event)" style="display: flex; flex-direction: column; gap: 0.6rem;">
+                        <div style="position: relative;">
+                            <input type="email" required placeholder="Enter your email" style="width: 100%; font-family: inherit; font-size: 0.88rem; background: #1f1f23; border: 1px solid #333338; color: #ffffff; padding: 0.75rem 1rem; border-radius: 8px; outline: none;" onfocus="this.style.borderColor='#71717a'" onblur="this.style.borderColor='#333338'">
+                            <button type="submit" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: #ffffff; color: #000; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">Join</button>
+                        </div>
+                        <span id="newsletterMsg" style="font-size: 0.78rem; color: #34d399; display: none;">Thank you for subscribing!</span>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright & Currency -->
+            <div style="border-top: 1px solid #27272a; padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.8rem;">
+                <div>&copy; 2026 AURA Studio Goods Inc. All Rights Reserved.</div>
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                    <select style="background: transparent; color: #a1a1aa; border: 1px solid #3f3f46; padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.78rem; outline: none; cursor: pointer;">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="JPY">JPY (¥)</option>
+                    </select>
+                    <a href="#" style="color: #a1a1aa;">Privacy Policy</a>
+                    <a href="#" style="color: #a1a1aa;">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- ================= MODALS & DRAWERS ================= -->
+
+    <!-- Shopping Cart Slide-Out Drawer -->
+    <div id="cartDrawerOverlay" onclick="closeCartDrawer()" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 150; transition: opacity 0.3s ease;"></div>
+    <div id="cartDrawer" style="position: fixed; top: 0; right: -420px; width: 100%; max-width: 400px; height: 100%; background: #ffffff; z-index: 160; box-shadow: -10px 0 30px rgba(0,0,0,0.15); transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column;">
+        
+        <!-- Drawer Header -->
+        <div style="padding: 1.5rem; border-bottom: 1px solid #f4f4f5; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: #18181b;">Your Shopping Bag</h3>
+                <span id="drawerCartCount" style="font-size: 0.8rem; background: #f4f4f5; color: #52525b; padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: 600;">0 items</span>
+            </div>
+            <button onclick="closeCartDrawer()" style="font-size: 1.2rem; color: #71717a; padding: 0.3rem;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <!-- Cart Items Container -->
+        <div id="cartItemsContainer" style="flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem;">
+            <!-- Rendered by JS -->
+        </div>
+
+        <!-- Drawer Footer Summary -->
+        <div style="padding: 1.5rem; border-top: 1px solid #f4f4f5; background: #faf9f6;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #71717a; margin-bottom: 0.5rem;">
+                <span>Subtotal</span>
+                <span id="cartSubtotal" style="font-weight: 600; color: #18181b;">$0.00</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #a1a1aa; margin-bottom: 1.2rem;">
+                <span>Taxes &amp; Shipping calculated at checkout</span>
+            </div>
+            <button onclick="handleCheckout()" style="width: 100%; background: #18181b; color: #ffffff; padding: 0.9rem; border-radius: 12px; font-weight: 600; font-size: 0.92rem; display: flex; justify-content: center; align-items: center; gap: 0.6rem; transition: background 0.2s;" onmouseover="this.style.background='#27272a';" onmouseout="this.style.background='#18181b';">
+                Proceed to Checkout <i class="fa-solid fa-arrow-right-long" style="font-size: 0.8rem;"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Minimalist Quick View Modal -->
+    <div id="quickViewModal" style="display: none; position: fixed; inset: 0; z-index: 180; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="background: #ffffff; width: 100%; max-width: 860px; border-radius: 20px; overflow: hidden; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+            <!-- Close Button -->
+            <button onclick="closeQuickView()" style="position: absolute; top: 1rem; right: 1rem; z-index: 10; width: 36px; height: 36px; background: rgba(0,0,0,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #18181b; font-size: 1rem;"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="quickview-grid" style="display: grid; grid-template-columns: 1fr 1fr;">
+                <!-- Product Image Container -->
+                <div style="background: #f4f3ef; height: 100%; min-height: 380px; display: flex; align-items: center; justify-content: center;">
+                    <img id="qvImage" src="" alt="Product Quick View" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+
+                <!-- Product Details -->
+                <div style="padding: 2.5rem; display: flex; flex-direction: column; justify-content: center;">
+                    <span id="qvCategory" style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #a1a1aa; margin-bottom: 0.4rem;">Category</span>
+                    <h2 id="qvTitle" style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 600; color: #18181b; margin-bottom: 0.6rem;">Product Name</h2>
+                    
+                    <!-- Star Rating -->
+                    <div style="display: flex; align-items: center; gap: 0.4rem; margin-bottom: 1.2rem;">
+                        <div style="color: #f59e0b; font-size: 0.85rem;">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                        </div>
+                        <span style="font-size: 0.8rem; color: #71717a;">(4.9 • 38 Reviews)</span>
+                    </div>
+
+                    <!-- Price -->
+                    <div style="margin-bottom: 1.2rem;">
+                        <span id="qvPrice" style="font-size: 1.5rem; font-weight: 700; color: #18181b;">$0.00</span>
+                        <span id="qvOriginalPrice" style="font-size: 1rem; color: #a1a1aa; text-decoration: line-through; margin-left: 0.6rem;"></span>
+                    </div>
+
+                    <p id="qvDescription" style="font-size: 0.88rem; color: #52525b; line-height: 1.6; margin-bottom: 1.8rem;">
+                        Ethically made with tactile raw materials. Crafted to integrate effortlessly into modern architectural spaces.
+                    </p>
+
+                    <!-- Add to Bag Action -->
+                    <button id="qvAddToCartBtn" style="background: #18181b; color: #ffffff; border: none; padding: 0.9rem; border-radius: 12px; font-weight: 600; font-size: 0.92rem; cursor: pointer; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.6rem;" onmouseover="this.style.background='#27272a';" onmouseout="this.style.background='#18181b';">
+                        <i class="fa-solid fa-bag-shopping"></i> Add to Bag
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Interactive Dual-Tab Auth Modal (Sign In / Register) -->
+    <div id="loginModal" style="display: none; position: fixed; inset: 0; z-index: 190; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(6px); align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="background: #ffffff; width: 100%; max-width: 420px; border-radius: 24px; padding: 2.2rem; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+            <!-- Close Button -->
+            <button onclick="closeLoginModal()" style="position: absolute; top: 1.2rem; right: 1.2rem; font-size: 1.1rem; color: #a1a1aa;"><i class="fa-solid fa-xmark"></i></button>
+
+            <!-- Brand Header -->
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <span style="font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 600; letter-spacing: 0.1em; color: #09090b;">AURA</span>
+                <p style="font-size: 0.82rem; color: #71717a; margin-top: 0.2rem;">Access your orders &amp; saved wishlists</p>
+            </div>
+
+            <!-- Tab Switchers -->
+            <div style="display: flex; background: #f4f4f5; border-radius: 12px; padding: 0.25rem; margin-bottom: 1.5rem;">
+                <button id="tabSignIn" onclick="switchAuthTab('signin')" style="flex: 1; padding: 0.5rem; font-size: 0.85rem; font-weight: 600; border-radius: 8px; background: #ffffff; color: #18181b; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">Sign In</button>
+                <button id="tabRegister" onclick="switchAuthTab('register')" style="flex: 1; padding: 0.5rem; font-size: 0.85rem; font-weight: 500; border-radius: 8px; background: transparent; color: #71717a;">Create Account</button>
+            </div>
+
+            <!-- Sign In Form -->
+            <form id="formSignIn" onsubmit="handleAuthSubmit(event, 'signin')" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #3f3f46; margin-bottom: 0.35rem;">Email Address</label>
+                    <input type="email" required placeholder="name@domain.com" style="width: 100%; font-family: inherit; font-size: 0.88rem; padding: 0.75rem; border: 1px solid #e4e4e7; border-radius: 8px; outline: none;" onfocus="this.style.borderColor='#18181b'" onblur="this.style.borderColor='#e4e4e7'">
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                        <label style="font-size: 0.8rem; font-weight: 600; color: #3f3f46;">Password</label>
+                        <a href="#" style="font-size: 0.75rem; color: #71717a;">Forgot?</a>
+                    </div>
+                    <input type="password" required placeholder="••••••••" style="width: 100%; font-family: inherit; font-size: 0.88rem; padding: 0.75rem; border: 1px solid #e4e4e7; border-radius: 8px; outline: none;" onfocus="this.style.borderColor='#18181b'" onblur="this.style.borderColor='#e4e4e7'">
+                </div>
+                <button type="submit" style="background: #18181b; color: #ffffff; border: none; padding: 0.85rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 0.5rem;">Sign In</button>
+            </form>
+
+            <!-- Create Account Form -->
+            <form id="formRegister" onsubmit="handleAuthSubmit(event, 'register')" style="display: none; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #3f3f46; margin-bottom: 0.35rem;">Full Name</label>
+                    <input type="text" required placeholder="Sarah Jenkins" style="width: 100%; font-family: inherit; font-size: 0.88rem; padding: 0.75rem; border: 1px solid #e4e4e7; border-radius: 8px; outline: none;" onfocus="this.style.borderColor='#18181b'" onblur="this.style.borderColor='#e4e4e7'">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #3f3f46; margin-bottom: 0.35rem;">Email Address</label>
+                    <input type="email" required placeholder="sarah@domain.com" style="width: 100%; font-family: inherit; font-size: 0.88rem; padding: 0.75rem; border: 1px solid #e4e4e7; border-radius: 8px; outline: none;" onfocus="this.style.borderColor='#18181b'" onblur="this.style.borderColor='#e4e4e7'">
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.8rem; font-weight: 600; color: #3f3f46; margin-bottom: 0.35rem;">Password</label>
+                    <input type="password" required placeholder="Create strong password" style="width: 100%; font-family: inherit; font-size: 0.88rem; padding: 0.75rem; border: 1px solid #e4e4e7; border-radius: 8px; outline: none;" onfocus="this.style.borderColor='#18181b'" onblur="this.style.borderColor='#e4e4e7'">
+                </div>
+                <button type="submit" style="background: #18181b; color: #ffffff; border: none; padding: 0.85rem; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 0.5rem;">Create Account</button>
+            </form>
+
+            <div id="authStatusMsg" style="display: none; margin-top: 1rem; padding: 0.6rem; background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; color: #047857; font-size: 0.8rem; text-align: center;"></div>
+        </div>
+    </div>
+
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // Catalog Products Data Array
+        const products = [
+            {
+                id: 1,
+                name: "Raw Stoneware Teapot",
+                category: "home",
+                categoryLabel: "Home & Living",
+                price: 85,
+                originalPrice: 110,
+                badge: "20% OFF",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1576020799627-aeac76d580dc?auto=format&fit=crop&w=800&q=80",
+                description: "Hand-thrown unglazed ceramic teapot with tactile matte finish and heat-insulated bamboo handle."
+            },
+            {
+                id: 2,
+                name: "Organic Linen Kimono Robe",
+                category: "apparel",
+                categoryLabel: "Apparel",
+                price: 140,
+                originalPrice: null,
+                badge: "New",
+                rating: 5.0,
+                image: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=800&q=80",
+                description: "Heavyweight French flax linen robe woven for breathable comfort and relaxed everyday drape."
+            },
+            {
+                id: 3,
+                name: "Solid Walnut Desk Organizer",
+                category: "workspace",
+                categoryLabel: "Workspaces",
+                price: 95,
+                originalPrice: null,
+                badge: "Bestseller",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80",
+                description: "Carved from sustainably harvested American walnut with brass accent trays for minimal desk storage."
+            },
+            {
+                id: 4,
+                name: "Anodized Aluminum Wireless Speaker",
+                category: "objects",
+                categoryLabel: "Tech & Objects",
+                price: 210,
+                originalPrice: 240,
+                badge: "Limited",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80",
+                description: "Acoustically tuned precision driver housed in a seamless bead-blasted aluminum cylindrical frame."
+            },
+            {
+                id: 5,
+                name: "Sculptural Matte Ceramic Vase",
+                category: "home",
+                categoryLabel: "Home & Living",
+                price: 70,
+                originalPrice: null,
+                badge: null,
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80",
+                description: "Architectural vessel featuring asymmetrical organic curvature designed for botanical arrangements."
+            },
+            {
+                id: 6,
+                name: "Heavyweight Cotton Over-Shirt",
+                category: "apparel",
+                categoryLabel: "Apparel",
+                price: 115,
+                originalPrice: null,
+                badge: "New",
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=80",
+                description: "Tailored from 380gsm organic carded cotton with horn buttons and subtle chest patch pocket."
+            },
+            {
+                id: 7,
+                name: "Architectural Brass Table Lamp",
+                category: "workspace",
+                categoryLabel: "Workspaces",
+                price: 280,
+                originalPrice: 320,
+                badge: "15% OFF",
+                rating: 5.0,
+                image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80",
+                description: "Dimmable LED task lamp with solid spun brass dome shade and weighted cantilever stand."
+            },
+            {
+                id: 8,
+                name: "Minimalist Mechanical Keyboard",
+                category: "objects",
+                categoryLabel: "Tech & Objects",
+                price: 185,
+                originalPrice: null,
+                badge: "Bestseller",
+                rating: 4.9,
+                image: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80",
+                description: "Compact 75% layout featuring pre-lubed silent linear switches and dye-sub PBT keycaps."
+            }
+        ];
+
+        // Shopping Cart State
+        let cart = [];
+
+        // Initialize Page Render
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProductGrid('all');
+        });
+
+        // Render Products in Grid
+        function renderProductGrid(filterCategory) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            const filtered = filterCategory === 'all' 
+                ? products 
+                : products.filter(p => p.category === filterCategory);
+
+            filtered.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'hover-lift';
+                card.style.cssText = 'background: #ffffff; border-radius: 16px; overflow: hidden; border: 1px solid #e4e4e7; display: flex; flex-direction: column; position: relative;';
+
+                card.innerHTML = `
+                    <!-- Badge -->
+                    ${p.badge ? `<span style="position: absolute; top: 12px; left: 12px; z-index: 5; background: #18181b; color: #fff; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; padding: 0.25rem 0.65rem; border-radius: 20px; letter-spacing: 0.05em;">${p.badge}</span>` : ''}
+
+                    <!-- Image Container -->
+                    <div class="img-zoom-container" style="height: 280px; background: #f4f3ef; cursor: pointer;" onclick="openQuickView(${p.id})">
+                        <img src="${p.image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover;">
+                        
+                        <!-- Quick View Overlay Button -->
+                        <button onclick="event.stopPropagation(); openQuickView(${p.id})" style="position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); background: rgba(255,255,255,0.92); backdrop-filter: blur(4px); color: #18181b; font-size: 0.78rem; font-weight: 600; padding: 0.5rem 1rem; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.05);">
+                            Quick View
+                        </button>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div style="padding: 1.25rem; display: flex; flex-direction: column; flex-grow: 1;">
+                        <span style="font-size: 0.72rem; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 0.2rem;">${p.categoryLabel}</span>
+                        <h3 style="font-size: 1.05rem; font-weight: 600; color: #18181b; margin-bottom: 0.4rem; cursor: pointer;" onclick="openQuickView(${p.id})">${p.name}</h3>
+                        
+                        <!-- Rating & Price row -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 0.75rem;">
+                            <div>
+                                <span style="font-size: 1.05rem; font-weight: 700; color: #18181b;">$${p.price}</span>
+                                ${p.originalPrice ? `<span style="font-size: 0.82rem; color: #a1a1aa; text-decoration: line-through; margin-left: 0.35rem;">$${p.originalPrice}</span>` : ''}
+                            </div>
+                            <div style="font-size: 0.78rem; color: #f59e0b; font-weight: 600; display: flex; align-items: center; gap: 0.2rem;">
+                                <i class="fa-solid fa-star"></i> <span>${p.rating}</span>
+                            </div>
+                        </div>
+
+                        <!-- Add to Bag Button -->
+                        <button onclick="addToCart(${p.id})" style="margin-top: 1rem; width: 100%; background: #f4f4f5; color: #18181b; border: 1px solid #e4e4e7; padding: 0.65rem; border-radius: 10px; font-weight: 600; font-size: 0.85rem; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 0.4rem;" onmouseover="this.style.background='#18181b'; this.style.color='#fff';" onmouseout="this.style.background='#f4f4f5'; this.style.color='#18181b';">
+                            <i class="fa-solid fa-plus" style="font-size: 0.75rem;"></i> Add to Bag
+                        </button>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Category Filter Tabs Switcher
+        function filterCategory(category, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.style.background = 'transparent';
+                btn.style.color = '#52525b';
+                btn.style.fontWeight = '500';
+            });
+            btnElement.style.background = '#18181b';
+            btnElement.style.color = '#ffffff';
+            btnElement.style.fontWeight = '600';
+
+            renderProductGrid(category);
+        }
+
+        // Cart Drawer Operations
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            openCartDrawer();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateCartQuantity(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        function updateCartUI() {
+            const countBadge = document.getElementById('cartBadgeCount');
+            const drawerCount = document.getElementById('drawerCartCount');
+            const itemsContainer = document.getElementById('cartItemsContainer');
+            const subtotalEl = document.getElementById('cartSubtotal');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            countBadge.innerText = totalItems;
+            drawerCount.innerText = `${totalItems} item${totalItems === 1 ? '' : 's'}`;
+            subtotalEl.innerText = `$${subtotal.toFixed(2)}`;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div style="text-align: center; padding: 3rem 1rem; color: #a1a1aa;">
+                        <i class="fa-solid fa-bag-shopping" style="font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p style="font-size: 0.95rem; font-weight: 500; color: #52525b;">Your bag is currently empty.</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.3rem;">Explore our studio essentials collection.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            itemsContainer.innerHTML = '';
+            cart.forEach(item => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display: flex; gap: 1rem; align-items: center; border-bottom: 1px solid #f4f4f5; padding-bottom: 1rem;';
+                row.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" style="width: 64px; height: 64px; object-fit: cover; border-radius: 8px; background: #f4f3ef;">
+                    <div style="flex: 1;">
+                        <h4 style="font-size: 0.9rem; font-weight: 600; color: #18181b; margin-bottom: 0.2rem;">${item.name}</h4>
+                        <div style="font-size: 0.85rem; font-weight: 700; color: #18181b;">$${item.price}</div>
+                        
+                        <!-- Quantity Controls -->
+                        <div style="display: flex; align-items: center; gap: 0.6rem; margin-top: 0.4rem;">
+                            <button onclick="updateCartQuantity(${item.id}, -1)" style="width: 22px; height: 22px; border: 1px solid #d4d4d8; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #52525b;">-</button>
+                            <span style="font-size: 0.85rem; font-weight: 600;">${item.quantity}</span>
+                            <button onclick="updateCartQuantity(${item.id}, 1)" style="width: 22px; height: 22px; border: 1px solid #d4d4d8; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #52525b;">+</button>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${item.id})" style="color: #a1a1aa; font-size: 0.9rem; padding: 0.4rem;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='#a1a1aa'"><i class="fa-regular fa-trash-can"></i></button>
+                `;
+                itemsContainer.appendChild(row);
+            });
+        }
+
+        function openCartDrawer() {
+            document.getElementById('cartDrawerOverlay').style.display = 'block';
+            document.getElementById('cartDrawer').style.right = '0';
+        }
+
+        function closeCartDrawer() {
+            document.getElementById('cartDrawerOverlay').style.display = 'none';
+            document.getElementById('cartDrawer').style.right = '-420px';
+        }
+
+        // Quick View Modal
+        function openQuickView(productId) {
+            const p = products.find(item => item.id === productId);
+            if (!p) return;
+
+            document.getElementById('qvImage').src = p.image;
+            document.getElementById('qvCategory').innerText = p.categoryLabel;
+            document.getElementById('qvTitle').innerText = p.name;
+            document.getElementById('qvPrice').innerText = `$${p.price}`;
+            document.getElementById('qvOriginalPrice').innerText = p.originalPrice ? `$${p.originalPrice}` : '';
+            document.getElementById('qvDescription').innerText = p.description;
+
+            const btn = document.getElementById('qvAddToCartBtn');
+            btn.onclick = () => {
+                addToCart(p.id);
+                closeQuickView();
+            };
+
+            document.getElementById('quickViewModal').style.display = 'flex';
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickViewModal').style.display = 'none';
+        }
+
+        // Auth Modal Operations
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('authStatusMsg').style.display = 'none';
+        }
+
+        function switchAuthTab(tab) {
+            const tabSignIn = document.getElementById('tabSignIn');
+            const tabRegister = document.getElementById('tabRegister');
+            const formSignIn = document.getElementById('formSignIn');
+            const formRegister = document.getElementById('formRegister');
+
+            if (tab === 'signin') {
+                tabSignIn.style.background = '#ffffff';
+                tabSignIn.style.color = '#18181b';
+                tabSignIn.style.fontWeight = '600';
+                tabSignIn.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+
+                tabRegister.style.background = 'transparent';
+                tabRegister.style.color = '#71717a';
+                tabRegister.style.fontWeight = '500';
+                tabRegister.style.boxShadow = 'none';
+
+                formSignIn.style.display = 'flex';
+                formRegister.style.display = 'none';
+            } else {
+                tabRegister.style.background = '#ffffff';
+                tabRegister.style.color = '#18181b';
+                tabRegister.style.fontWeight = '600';
+                tabRegister.style.boxShadow = '0 2px 4px rgba(0,0,0,0.05)';
+
+                tabSignIn.style.background = 'transparent';
+                tabSignIn.style.color = '#71717a';
+                tabSignIn.style.fontWeight = '500';
+                tabSignIn.style.boxShadow = 'none';
+
+                formRegister.style.display = 'flex';
+                formSignIn.style.display = 'none';
+            }
+        }
+
+        function handleAuthSubmit(event, type) {
+            event.preventDefault();
+            const msg = document.getElementById('authStatusMsg');
+            msg.innerText = type === 'signin' ? 'Successfully authenticated!' : 'Account created successfully!';
+            msg.style.display = 'block';
+
+            setTimeout(() => {
+                closeLoginModal();
+            }, 1200);
+        }
+
+        // Search Overlay Modal Operations
+        function toggleSearchModal() {
+            const modal = document.getElementById('searchModal');
+            if (modal.style.display === 'flex') {
+                modal.style.display = 'none';
+            } else {
+                modal.style.display = 'flex';
+                document.getElementById('searchInput').focus();
+            }
+        }
+
+        function handleSearch(query) {
+            const container = document.getElementById('searchResults');
+            if (!query.trim()) {
+                container.innerHTML = '<p style="color: #71717a; font-size: 0.9rem;">Start typing to search products...</p>';
+                return;
+            }
+
+            const matches = products.filter(p => p.name.toLowerCase().includes(query.toLowerCase()) || p.categoryLabel.toLowerCase().includes(query.toLowerCase()));
+
+            if (matches.length === 0) {
+                container.innerHTML = '<p style="color: #71717a; font-size: 0.9rem;">No matching essentials found.</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            matches.forEach(p => {
+                const item = document.createElement('div');
+                item.style.cssText = 'display: flex; gap: 1rem; align-items: center; background: #ffffff; padding: 0.75rem 1rem; border-radius: 12px; cursor: pointer; border: 1px solid #e4e4e7;';
+                item.onclick = () => {
+                    toggleSearchModal();
+                    openQuickView(p.id);
+                };
+                item.innerHTML = `
+                    <img src="${p.image}" alt="${p.name}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px;">
+                    <div>
+                        <div style="font-size: 0.9rem; font-weight: 600; color: #18181b;">${p.name}</div>
+                        <div style="font-size: 0.8rem; color: #71717a;">$${p.price} • ${p.categoryLabel}</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Mobile Nav Drawer Toggle
+        function toggleMobileNav() {
+            const drawer = document.getElementById('mobileNavDrawer');
+            drawer.style.display = drawer.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Mock Checkout Action
+        function handleCheckout() {
+            if (cart.length === 0) {
+                alert('Your bag is currently empty.');
+                return;
+            }
+            alert('Proceeding to secure checkout platform...');
+        }
+
+        // Newsletter Subscription Handler
+        function handleNewsletter(event) {
+            event.preventDefault();
+            const msg = document.getElementById('newsletterMsg');
+            msg.style.display = 'block';
+            event.target.reset();
+        }
+    </script>
+</body>
+</html>

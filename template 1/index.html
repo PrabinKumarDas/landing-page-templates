@@ -1,0 +1,325 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Cumulo Cloud DevOps</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sticky nav, split hero (copy + live pipeline panel), feature grid, YAML walkthrough, metrics band, CTA, footer */
+:root {
+  --bg: #eef2f6;
+  --surface: #ffffff;
+  --surface-2: #e4eaf1;
+  --ink: #0e1a2b;
+  --ink-soft: #4a5a70;
+  --line: #cfd8e3;
+  --accent: #e8501a;
+  --accent-ink: #ffffff;
+  --ok: #138a55;
+  --warn: #b7791f;
+  --code-bg: #0e1a2b;
+  --code-fg: #d7e2f0;
+  --code-dim: #7f93ad;
+  --font-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a1220; --surface: #111c2e; --surface-2: #17263d; --ink: #e8eef7; --ink-soft: #97a8c0;
+    --line: #243652; --accent: #ff7a45; --accent-ink: #1a0a02; --ok: #3ecf8e; --warn: #e3b04b;
+    --code-bg: #060d18; --code-fg: #d7e2f0; --code-dim: #6f84a0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a1220; --surface: #111c2e; --surface-2: #17263d; --ink: #e8eef7; --ink-soft: #97a8c0;
+  --line: #243652; --accent: #ff7a45; --accent-ink: #1a0a02; --ok: #3ecf8e; --warn: #e3b04b;
+  --code-bg: #060d18; --code-fg: #d7e2f0; --code-dim: #6f84a0; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3 { font-family: var(--font-display); line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: -0.02em; }
+p { margin: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.wrap { max-width: 1120px; margin: 0 auto; }
+.mono { font-family: var(--font-mono); }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* nav */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.nav-in { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 28px; height: 64px; }
+.logo { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 21px; letter-spacing: -0.02em; }
+.logo svg { width: 30px; height: 30px; }
+.links { display: flex; gap: 26px; margin-left: 12px; font-size: 15px; color: var(--ink-soft); }
+.links a:hover { color: var(--ink); }
+.spacer { flex: 1; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font: 500 15px/1 var(--font-body); padding: 12px 20px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; transition: transform .15s, background .15s; }
+.btn:hover { background: var(--surface-2); }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 500; }
+.btn-primary:hover { background: var(--accent); filter: brightness(1.08); }
+.btn-login { padding: 10px 18px; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; align-items: center; padding-block: 72px 80px; }
+.hero h1 { font-size: clamp(38px, 5.4vw, 68px); font-weight: 700; margin-top: 18px; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.lede { font-size: 18px; color: var(--ink-soft); max-width: 52ch; margin-top: 22px; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.fine { margin-top: 18px; font-size: 13px; color: var(--ink-soft); font-family: var(--font-mono); }
+
+/* pipeline panel */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 24px 48px -28px rgba(14, 26, 43, .35); overflow: hidden; min-width: 0; }
+.panel-head { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-soft); }
+.panel-head b { color: var(--ink); font-weight: 500; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); display: inline-block; }
+.run { padding: 8px 18px 4px; }
+.stage { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 11px 0; border-bottom: 1px dashed var(--line); font-family: var(--font-mono); font-size: 13.5px; }
+.stage:last-child { border-bottom: 0; }
+.stage .t { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.tick { width: 18px; height: 18px; border-radius: 50%; background: var(--ok); display: grid; place-items: center; color: var(--surface); }
+.tick svg { width: 11px; height: 11px; }
+.tick.live { background: transparent; border: 2px solid var(--accent); border-top-color: transparent; animation: spin 1s linear infinite; }
+.stage small { display: block; color: var(--ink-soft); font-size: 11.5px; margin-top: 1px; }
+.regions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border-top: 1px solid var(--line); }
+.region { background: var(--surface); padding: 14px 18px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); }
+.region b { display: block; font-family: var(--font-display); font-size: 22px; color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.region b span { font-size: 13px; color: var(--ink-soft); font-weight: 500; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* sections */
+section { padding-block: 72px; }
+.sec-head { max-width: 640px; margin-bottom: 40px; }
+.sec-head h2 { font-size: clamp(30px, 3.8vw, 44px); font-weight: 700; margin-top: 12px; }
+.sec-head p { color: var(--ink-soft); margin-top: 14px; font-size: 17px; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.feat { background: var(--surface); padding: 28px 26px 30px; min-width: 0; }
+.feat .ic { width: 40px; height: 40px; border-radius: 10px; background: var(--surface-2); display: grid; place-items: center; color: var(--accent); margin-bottom: 18px; }
+.feat .ic svg { width: 22px; height: 22px; }
+.feat h3 { font-size: 21px; font-weight: 600; }
+.feat p { color: var(--ink-soft); margin-top: 10px; font-size: 15px; }
+.feat .tag { display: inline-block; margin-top: 16px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-soft); border: 1px solid var(--line); padding: 3px 8px; border-radius: 6px; }
+
+/* walkthrough */
+.walk { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 48px; align-items: start; }
+.steps { display: grid; gap: 22px; }
+.step { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 16px; }
+.step .k { font-family: var(--font-mono); font-size: 12px; color: var(--accent); border: 1px solid var(--line); border-radius: 6px; padding: 4px 0; text-align: center; height: fit-content; background: var(--surface); }
+.step h3 { font-size: 20px; font-weight: 600; }
+.step p { color: var(--ink-soft); font-size: 15px; margin-top: 6px; }
+.code { background: var(--code-bg); color: var(--code-fg); border-radius: 14px; border: 1px solid var(--line); overflow: hidden; min-width: 0; }
+.code .bar { display: flex; justify-content: space-between; padding: 12px 18px; border-bottom: 1px solid rgba(127,147,173,.25); font-family: var(--font-mono); font-size: 12px; color: var(--code-dim); }
+.code pre { margin: 0; padding: 18px; overflow-x: auto; font: 400 13.5px/1.75 var(--font-mono); }
+.c-k { color: #7cc0ff; } .c-s { color: #9be2b4; } .c-c { color: var(--code-dim); } .c-a { color: #ffa371; }
+
+/* metrics */
+.band { background: var(--ink); color: var(--bg); border-radius: 18px; padding: 44px 36px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; }
+.band div { min-width: 0; }
+.band b { display: block; font-family: var(--font-display); font-size: clamp(34px, 4.4vw, 52px); font-weight: 700; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+.band span { display: block; margin-top: 10px; font-size: 14px; opacity: .72; }
+:root[data-theme="dark"] .band, :root:not([data-theme="light"]) .band { }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .band { background: var(--surface-2); color: var(--ink); } }
+:root[data-theme="dark"] .band { background: var(--surface-2); color: var(--ink); }
+
+/* cta + footer */
+.cta { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 48px 40px; display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: space-between; }
+.cta h2 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 700; max-width: 18ch; }
+footer { border-top: 1px solid var(--line); margin-top: 72px; padding-block: 32px 40px; display: flex; flex-wrap: wrap; gap: 16px 32px; justify-content: space-between; color: var(--ink-soft); font-size: 14px; }
+footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+footer a:hover { color: var(--ink); }
+
+/* login dialog */
+dialog { border: 1px solid var(--line); border-radius: 16px; background: var(--surface); color: var(--ink); padding: 0; width: min(420px, calc(100vw - 32px)); box-shadow: 0 30px 80px -20px rgba(0,0,0,.45); }
+dialog::backdrop { background: rgba(8, 14, 26, .55); }
+.dlg { padding: 28px; display: grid; gap: 16px; }
+.dlg h2 { font-size: 26px; font-weight: 700; }
+.dlg label { display: grid; gap: 6px; font-size: 13px; color: var(--ink-soft); font-family: var(--font-mono); }
+.dlg input { font: 400 15px var(--font-body); padding: 12px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; }
+.dlg .row { display: flex; gap: 10px; }
+.dlg .row .btn { flex: 1; }
+#login-msg { font-size: 13px; color: var(--ok); min-height: 1.2em; font-family: var(--font-mono); }
+
+@media (max-width: 900px) {
+  .hero, .walk { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .hero { padding-block: 44px 56px; }
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .band { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 32px 24px; }
+  .links { display: none; }
+}
+@media (max-width: 560px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .nav-in { gap: 12px; }
+  .btn-start { display: none; }
+  .regions { grid-template-columns: minmax(0, 1fr); }
+  .cta { padding: 32px 24px; }
+  section { padding-block: 52px; }
+}
+@media (prefers-reduced-motion: reduce) { .tick.live { animation: none; } html { scroll-behavior: auto; } .btn { transition: none; } }
+</style>
+
+<div class="nav">
+  <div class="nav-in">
+    <a class="logo" href="#top" aria-label="Cumulo home">
+      <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M9 24a6 6 0 0 1-.6-11.97A8 8 0 0 1 23.9 11.3 6.4 6.4 0 0 1 23 24H9Z" fill="var(--accent)"/><path d="M11 19l3 3 7-7" stroke="var(--accent-ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Cumulo
+    </a>
+    <nav class="links" aria-label="Primary">
+      <a href="#platform">Platform</a>
+      <a href="#workflow">Workflow</a>
+      <a href="#numbers">Reliability</a>
+      <a href="#start">Pricing</a>
+    </nav>
+    <div class="spacer"></div>
+    <button class="btn btn-login" id="open-login" type="button">Log in</button>
+    <a class="btn btn-primary btn-start" href="#start">Start free</a>
+  </div>
+</div>
+
+<main class="wrap" id="top">
+  <div class="hero">
+    <div>
+      <p class="eyebrow">Cloud DevOps platform</p>
+      <h1>Push to main. Live in <em>three regions</em> in under 4 minutes.</h1>
+      <p class="lede">Cumulo runs your builds, tests, security scans and Kubernetes rollouts as one pipeline, then rolls back on its own when error rates climb. Your team ships more and gets paged less.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#start">Start free trial</a>
+        <a class="btn" href="#workflow">See a pipeline</a>
+      </div>
+      <p class="fine">No card needed &middot; 2,000 build minutes included</p>
+    </div>
+
+    <div class="panel" aria-label="Example pipeline run">
+      <div class="panel-head"><span class="dot"></span><b>payments-api</b> &middot; main &middot; a41f9c2</div>
+      <div class="run">
+        <div class="stage"><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5l2.6 2.6L10 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div>build<small>docker buildx, layer cache hit 94%</small></div><span class="t">38s</span></div>
+        <div class="stage"><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5l2.6 2.6L10 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div>test<small>1,284 tests, 8 parallel runners</small></div><span class="t">52s</span></div>
+        <div class="stage"><span class="tick"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5l2.6 2.6L10 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><div>scan<small>0 critical CVEs, SBOM signed</small></div><span class="t">21s</span></div>
+        <div class="stage"><span class="tick live"></span><div>canary 10%<small>watching p99 &lt; 250 ms, 5xx &lt; 0.1%</small></div><span class="t">1m 04s</span></div>
+      </div>
+      <div class="regions">
+        <div class="region">ap-south-1<b>118<span> ms p99</span></b></div>
+        <div class="region">eu-west-1<b>142<span> ms p99</span></b></div>
+        <div class="region">us-east-1<b>131<span> ms p99</span></b></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="platform">
+    <div class="sec-head">
+      <p class="eyebrow">Platform</p>
+      <h2>Everything between commit and customer</h2>
+      <p>One control plane for CI, infrastructure and runtime, so nobody stitches five tools together on a Friday.</p>
+    </div>
+    <div class="grid">
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.5 6H12a3 3 0 0 1 3 3v0M8.5 18H12a3 3 0 0 0 3-3v0"/></svg></div><h3>Pipelines as code</h3><p>Define stages in YAML next to your app. Fan out across runners and cache what did not change.</p><span class="tag">median build 41 s</span></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></div><h3>Managed Kubernetes</h3><p>Rolling, blue-green and canary releases on EKS, GKE or AKS, with one deployment spec for all three.</p><span class="tick-none tag">v1.31 supported</span></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h10M4 17h7"/><path d="M17 14l3 3-3 3"/></svg></div><h3>Terraform workflows</h3><p>Plan on every pull request, apply on merge, and keep state locked and versioned per environment.</p><span class="tag">drift check every 6 h</span></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg></div><h3>Built-in security</h3><p>Image scanning, secret detection and signed artifacts run before anything reaches a cluster.</p><span class="tag">SOC 2 Type II</span></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-6 4 3 5-8 4 5"/><path d="M3 21h18"/></svg></div><h3>Observability</h3><p>Logs, metrics and traces next to each release, so you see which deploy moved the latency graph.</p><span class="tag">15-day trace retention</span></div>
+      <div class="feat"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg></div><h3>Automatic rollback</h3><p>If the canary breaches your error budget, Cumulo reverts to the last healthy revision and tells the channel.</p><span class="tag">median revert 19 s</span></div>
+    </div>
+  </section>
+
+  <section id="workflow">
+    <div class="walk">
+      <div>
+        <div class="sec-head" style="margin-bottom:28px">
+          <p class="eyebrow">Workflow</p>
+          <h2>From pull request to production</h2>
+        </div>
+        <div class="steps">
+          <div class="step"><span class="k">PR</span><div><h3>Preview every change</h3><p>Each pull request gets its own environment and a Terraform plan comment.</p></div></div>
+          <div class="step"><span class="k">main</span><div><h3>Build, test, scan</h3><p>Runners start in about 3 seconds and stream logs back to the commit.</p></div></div>
+          <div class="step"><span class="k">canary</span><div><h3>Roll out with guardrails</h3><p>Traffic shifts 10%, 50%, 100% only while your service level targets hold.</p></div></div>
+        </div>
+      </div>
+      <div class="code">
+        <div class="bar"><span>.cumulo/pipeline.yml</span><span>yaml</span></div>
+<pre><span class="c-c"># deploy payments-api to three regions</span>
+<span class="c-k">service:</span> <span class="c-s">payments-api</span>
+<span class="c-k">trigger:</span>
+  <span class="c-k">branch:</span> <span class="c-s">main</span>
+<span class="c-k">stages:</span>
+  - <span class="c-k">build:</span>  { <span class="c-k">image:</span> <span class="c-s">node:22</span>, <span class="c-k">cache:</span> <span class="c-a">true</span> }
+  - <span class="c-k">test:</span>   { <span class="c-k">parallel:</span> <span class="c-a">8</span> }
+  - <span class="c-k">scan:</span>   { <span class="c-k">fail_on:</span> <span class="c-s">critical</span> }
+  - <span class="c-k">deploy:</span>
+      <span class="c-k">strategy:</span> <span class="c-s">canary</span>
+      <span class="c-k">steps:</span> [<span class="c-a">10</span>, <span class="c-a">50</span>, <span class="c-a">100</span>]
+      <span class="c-k">regions:</span> [<span class="c-s">ap-south-1</span>, <span class="c-s">eu-west-1</span>, <span class="c-s">us-east-1</span>]
+      <span class="c-k">rollback_if:</span>
+        <span class="c-k">p99_ms:</span> <span class="c-a">"&gt; 250"</span>
+        <span class="c-k">error_rate:</span> <span class="c-a">"&gt; 0.1%"</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="numbers">
+    <div class="band">
+      <div><b>99.99%</b><span>control plane uptime, trailing 12 months</span></div>
+      <div><b>3m 52s</b><span>median commit to production</span></div>
+      <div><b>41%</b><span>fewer failed deploys after 90 days</span></div>
+      <div><b>2.8M</b><span>pipeline runs every month</span></div>
+    </div>
+  </section>
+
+  <section id="start" style="padding-top:24px">
+    <div class="cta">
+      <h2>Run your first pipeline today</h2>
+      <div class="cta-row" style="margin-top:0">
+        <a class="btn btn-primary" href="#top">Start free trial</a>
+        <a class="btn" href="#platform">Talk to an engineer</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Cumulo Cloud, Inc.</span>
+    <nav aria-label="Footer">
+      <a href="#platform">Platform</a>
+      <a href="#workflow">Docs</a>
+      <a href="#numbers">Status</a>
+      <a href="#start">Pricing</a>
+    </nav>
+  </footer>
+</main>
+
+<dialog id="login">
+  <form class="dlg" id="login-form" method="dialog">
+    <h2>Log in to Cumulo</h2>
+    <label for="email">Work email<input id="email" name="email" type="email" placeholder="you@company.com" autocomplete="email" required></label>
+    <label for="pw">Password<input id="pw" name="pw" type="password" placeholder="At least 8 characters" autocomplete="current-password" minlength="8" required></label>
+    <p id="login-msg" role="status"></p>
+    <div class="row">
+      <button class="btn" type="button" id="close-login">Cancel</button>
+      <button class="btn btn-primary" type="submit">Log in</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function () {
+  var dlg = document.getElementById('login');
+  var form = document.getElementById('login-form');
+  var msg = document.getElementById('login-msg');
+  document.getElementById('open-login').addEventListener('click', function () {
+    msg.textContent = '';
+    if (dlg.showModal) { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+  });
+  document.getElementById('close-login').addEventListener('click', function () { dlg.close(); });
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    msg.textContent = 'Demo page: sign-in is not connected yet.';
+  });
+})();
+</script>
+
+</body></html>
