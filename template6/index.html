@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudPulse - Next-Gen Cloud DevOps Platform</title>
+    <!-- FontAwesome for sleek SVG icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Smooth scrolling and global baseline reset */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0b0f19;
+            color: #f1f5f9;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Keyframe Animations */
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.08); }
+        }
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphism Reusable Class */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(14, 165, 233, 0.25);
+        }
+
+        /* Mobile Menu Toggle logic using inline standard styling */
+        @media (max-width: 768px) {
+            .desktop-nav { display: none !important; }
+            .mobile-menu-btn { display: flex !important; }
+            .hero-title { font-size: 2.2rem !important; }
+            .hero-grid { grid-template-columns: 1fr !important; text-align: center; }
+            .hero-cta-group { justify-content: center !important; }
+            .grid-4 { grid-template-columns: 1fr !important; }
+            .grid-3 { grid-template-columns: 1fr !important; }
+            .grid-2 { grid-template-columns: 1fr !important; }
+        }
+    </style>
+</head>
+<body style="background-color: #0b0f19; color: #f1f5f9; margin: 0; padding: 0;">
+
+    <!-- Background Atmospheric Glow Spheres -->
+    <div style="position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(56,189,248,0.15) 0%, rgba(0,0,0,0) 70%); top: -100px; left: -100px; z-index: 0; pointer-events: none; animation: pulseGlow 8s infinite alternate;"></div>
+    <div style="position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(0,0,0,0) 70%); bottom: -150px; right: -100px; z-index: 0; pointer-events: none; animation: pulseGlow 10s infinite alternate-reverse;"></div>
+
+    <!-- Navigation Bar -->
+    <header style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); background: rgba(11, 15, 25, 0.85); border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between;">
+            
+            <!-- Brand Logo -->
+            <a href="#" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(14, 165, 233, 0.4);">
+                    <i class="fa-solid fa-cloud" style="color: #ffffff; font-size: 1.2rem;"></i>
+                </div>
+                <span style="font-size: 1.4rem; font-weight: 800; background: linear-gradient(to right, #ffffff, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CloudPulse</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <nav class="desktop-nav" style="display: flex; align-items: center; gap: 2rem;">
+                <a href="#services" style="color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#94a3b8'">Services</a>
+                <a href="#solutions" style="color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#94a3b8'">Solutions</a>
+                <a href="#features" style="color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#94a3b8'">Features</a>
+                <a href="#pricing" style="color: #94a3b8; text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: color 0.2s;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#94a3b8'">Pricing</a>
+            </nav>
+
+            <!-- Navigation Actions / Login Button -->
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button onclick="openModal()" style="background: linear-gradient(135deg, #0ea5e9, #6366f1); border: none; padding: 0.65rem 1.4rem; color: #ffffff; font-weight: 600; font-size: 0.95rem; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35); transition: all 0.2s;" onmouseover="this.style.transform='scale(1.03)';" onmouseout="this.style.transform='scale(1)';">
+                    <i class="fa-solid fa-right-to-bracket" style="margin-right: 0.5rem;"></i> Login / Sign In
+                </button>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" style="display: none; background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0.5rem 0.75rem; border-radius: 6px; cursor: pointer;">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div id="mobileMenu" style="display: none; background: #0f172a; padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.08);">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <a href="#services" onclick="toggleMobileMenu()" style="color: #cbd5e1; text-decoration: none; font-size: 1rem;">Services</a>
+                <a href="#solutions" onclick="toggleMobileMenu()" style="color: #cbd5e1; text-decoration: none; font-size: 1rem;">Solutions</a>
+                <a href="#features" onclick="toggleMobileMenu()" style="color: #cbd5e1; text-decoration: none; font-size: 1rem;">Features</a>
+                <a href="#pricing" onclick="toggleMobileMenu()" style="color: #cbd5e1; text-decoration: none; font-size: 1rem;">Pricing</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section style="position: relative; padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto; z-index: 10;">
+        <div class="hero-grid" style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 3rem; align-items: center;">
+            
+            <!-- Hero Left Content -->
+            <div>
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 0.35rem 0.9rem; border-radius: 20px; color: #38bdf8; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;">
+                    <span style="display: inline-block; width: 8px; height: 8px; background-color: #10b981; border-radius: 50%;"></span>
+                    Next-Gen Infrastructure Orchestration
+                </div>
+                <h1 class="hero-title" style="font-size: 3.2rem; font-weight: 800; line-height: 1.15; margin: 0 0 1.2rem 0; letter-spacing: -0.02em;">
+                    Automate Cloud Ops with <span style="background: linear-gradient(135deg, #38bdf8, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Zero Friction</span>
+                </h1>
+                <p style="font-size: 1.15rem; color: #94a3b8; margin-bottom: 2rem; max-width: 540px;">
+                    Empower your enterprise with unified CI/CD pipelines, autonomous Infrastructure as Code, multi-cloud control, and real-time observability.
+                </p>
+                <div class="hero-cta-group" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <a href="#pricing" style="background: linear-gradient(135deg, #0ea5e9, #3b82f6); color: #ffffff; text-decoration: none; padding: 0.9rem 1.8rem; border-radius: 10px; font-weight: 600; font-size: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.4); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                        Start Free Trial <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#demo" style="background: rgba(255, 255, 255, 0.05); color: #f1f5f9; text-decoration: none; padding: 0.9rem 1.8rem; border-radius: 10px; font-weight: 600; font-size: 1rem; border: 1px solid rgba(255,255,255,0.15); display: inline-flex; align-items: center; gap: 0.5rem; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">
+                        <i class="fa-solid fa-play" style="font-size: 0.8rem; color: #38bdf8;"></i> Watch Demo
+                    </a>
+                </div>
+                <!-- Trust Badges -->
+                <div style="margin-top: 2.5rem; display: flex; align-items: center; gap: 1.5rem; color: #64748b; font-size: 0.85rem; flex-wrap: wrap;">
+                    <span><i class="fa-solid fa-shield-halved" style="color: #10b981; margin-right: 0.3rem;"></i> SOC2 Certified</span>
+                    <span><i class="fa-solid fa-bolt" style="color: #f59e0b; margin-right: 0.3rem;"></i> 99.99% SLA Uptime</span>
+                    <span><i class="fa-solid fa-infinity" style="color: #38bdf8; margin-right: 0.3rem;"></i> Native Multi-Cloud</span>
+                </div>
+            </div>
+
+            <!-- Hero Right Code / Visual Card -->
+            <div style="animation: floatAnim 6s ease-in-out infinite;">
+                <div class="glass-card" style="padding: 1.5rem; border-radius: 16px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.2); font-family: 'Courier New', Courier, monospace;">
+                    <!-- Terminal Header -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem; margin-bottom: 1rem;">
+                        <div style="display: flex; gap: 0.5rem;">
+                            <span style="width: 12px; height: 12px; background-color: #ef4444; border-radius: 50%;"></span>
+                            <span style="width: 12px; height: 12px; background-color: #f59e0b; border-radius: 50%;"></span>
+                            <span style="width: 12px; height: 12px; background-color: #10b981; border-radius: 50%;"></span>
+                        </div>
+                        <span style="font-size: 0.8rem; color: #64748b; font-family: sans-serif;">cloudpulse-pipeline.tf</span>
+                    </div>
+                    <!-- Terminal Code Snippet -->
+                    <pre style="margin: 0; font-size: 0.85rem; color: #e2e8f0; line-height: 1.6; overflow-x: auto;">
+<span style="color: #c678dd;">resource</span> <span style="color: #98c379;">"cloudpulse_cluster"</span> <span style="color: #d19a66;">"production"</span> {
+  <span style="color: #e06c75;">name</span>       = <span style="color: #98c379;">"global-k8s-us-east"</span>
+  <span style="color: #e06c75;">region</span>     = <span style="color: #98c379;">"multi-region-auto"</span>
+  <span style="color: #e06c75;">auto_scale</span> = <span style="color: #d19a66;">true</span>
+
+  <span style="color: #61afef;">pipeline_config</span> {
+    <span style="color: #e06c75;">ci_cd</span>     = <span style="color: #98c379;">"zero-downtime"</span>
+    <span style="color: #e06c75;">security</span> = <span style="color: #98c379;">"auto-scan-enabled"</span>
+    <span style="color: #e06c75;">cost_opt</span> = <span style="color: #98c379;">"ai-driven"</span>
+  }
+}
+<span style="color: #5c6370;"># Status: Infrastructure Provisioned in 1.4s</span></pre>
+                    <!-- Live Status Indicator -->
+                    <div style="margin-top: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.2); border-radius: 8px; padding: 0.6rem; display: flex; align-items: center; justify-content: space-between; font-family: sans-serif; font-size: 0.8rem;">
+                        <span style="color: #34d399; font-weight: 600;"><i class="fa-solid fa-circle-check" style="margin-right: 0.4rem;"></i> Multi-Cloud Deployment Active</span>
+                        <span style="color: #94a3b8;">Latency: 12ms</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Metrics Bar Section -->
+    <section style="background: rgba(15, 23, 42, 0.5); border-y: 1px solid rgba(255, 255, 255, 0.05); padding: 2.5rem 1.5rem;">
+        <div style="max-width: 1200px; margin: 0 auto;" class="grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; text-align: center;">
+            <div style="padding: 1rem;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: #38bdf8;">99.99%</div>
+                <div style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.25rem;">Guaranteed Uptime</div>
+            </div>
+            <div style="padding: 1rem;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: #a855f7;">10x</div>
+                <div style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.25rem;">Faster Deployments</div>
+            </div>
+            <div style="padding: 1rem;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: #34d399;">45%</div>
+                <div style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.25rem;">Average Cloud Cost Savings</div>
+            </div>
+            <div style="padding: 1rem;">
+                <div style="font-size: 2.5rem; font-weight: 800; color: #f43f5e;">5M+</div>
+                <div style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.25rem;">Pipelines Executed Daily</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Pillars Section -->
+    <section id="features" style="padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 3.5rem;">
+            <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem;">Engineered for Modern DevOps</h2>
+            <p style="color: #94a3b8; max-width: 600px; margin: 0 auto; font-size: 1rem;">Everything you need to ship resilient software faster without compromising governance.</p>
+        </div>
+
+        <div class="grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;">
+            <!-- Card 1 -->
+            <div class="glass-card" style="padding: 1.75rem;">
+                <div style="width: 48px; height: 48px; background: rgba(56, 189, 248, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+                    <i class="fa-solid fa-code-merge" style="color: #38bdf8; font-size: 1.4rem;"></i>
+                </div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 0.5rem 0;">Smart CI/CD</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">Automated pipeline generation with self-healing build steps and rollback triggers.</p>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="glass-card" style="padding: 1.75rem;">
+                <div style="width: 48px; height: 48px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+                    <i class="fa-solid fa-cubes" style="color: #a855f7; font-size: 1.4rem;"></i>
+                </div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 0.5rem 0;">Infrastructure as Code</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">Declarative state management for AWS, GCP, Azure, and private cloud infrastructure.</p>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="glass-card" style="padding: 1.75rem;">
+                <div style="width: 48px; height: 48px; background: rgba(52, 211, 153, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+                    <i class="fa-solid fa-chart-line" style="color: #34d399; font-size: 1.4rem;"></i>
+                </div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 0.5rem 0;">Real-time Metrics</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">Full-stack observability with automated telemetry, traces, and AI anomaly detection.</p>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="glass-card" style="padding: 1.75rem;">
+                <div style="width: 48px; height: 48px; background: rgba(244, 63, 94, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem;">
+                    <i class="fa-solid fa-user-shield" style="color: #f43f5e; font-size: 1.4rem;"></i>
+                </div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin: 0 0 0.5rem 0;">DevSecOps Guard</h3>
+                <p style="color: #94a3b8; font-size: 0.9rem; margin: 0;">Automated vulnerability scanning, secrets detection, and compliance enforcement.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Interactive ROI / Infrastructure Calculator Widget -->
+    <section id="solutions" style="padding: 4rem 1.5rem; max-width: 1000px; margin: 0 auto;">
+        <div class="glass-card" style="padding: 2.5rem; border-radius: 20px; background: linear-gradient(180deg, rgba(30,41,59,0.8) 0%, rgba(15,23,42,0.9) 100%);">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h3 style="font-size: 1.8rem; font-weight: 700; margin: 0 0 0.5rem 0;">Estimate Your DevOps Efficiency</h3>
+                <p style="color: #94a3b8; font-size: 0.95rem;">See how much time and cloud compute budget CloudPulse can save your team.</p>
+            </div>
+
+            <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center;">
+                <!-- Calculator Controls -->
+                <div style="display: flex; flex-direction: column; gap: 1.2rem;">
+                    <div>
+                        <label style="display: justify-content; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1; font-weight: 600; margin-bottom: 0.5rem; display: flex;">
+                            <span>Engineering Team Size:</span>
+                            <span id="teamSizeVal" style="color: #38bdf8;">15 Engineers</span>
+                        </label>
+                        <input type="range" id="teamSize" min="2" max="100" value="15" style="width: 100%; accent-color: #0ea5e9; cursor: pointer;" oninput="updateCalculations()">
+                    </div>
+                    <div>
+                        <label style="display: justify-content; justify-content: space-between; font-size: 0.9rem; color: #cbd5e1; font-weight: 600; margin-bottom: 0.5rem; display: flex;">
+                            <span>Monthly Cloud Spend ($):</span>
+                            <span id="cloudSpendVal" style="color: #38bdf8;">$12,000 / mo</span>
+                        </label>
+                        <input type="range" id="cloudSpend" min="1000" max="100000" step="1000" value="12000" style="width: 100%; accent-color: #0ea5e9; cursor: pointer;" oninput="updateCalculations()">
+                    </div>
+                </div>
+
+                <!-- Calculator Output Display -->
+                <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.2); padding: 1.5rem; border-radius: 12px; text-align: center;">
+                    <div style="font-size: 0.85rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4rem;">Estimated Annual Savings</div>
+                    <div id="savingsResult" style="font-size: 2.6rem; font-weight: 800; color: #34d399; margin-bottom: 0.5rem;">$43,200</div>
+                    <div style="font-size: 0.85rem; color: #cbd5e1;">+ <span id="hoursSaved" style="color: #38bdf8; font-weight: 700;">1,440 hours</span> dev time saved annually</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Plans Section -->
+    <section id="pricing" style="padding: 5rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+        <div style="text-align: center; margin-bottom: 3.5rem;">
+            <h2 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem;">Flexible, Transparent Pricing</h2>
+            <p style="color: #94a3b8; font-size: 1rem;">Scale seamlessly from startup prototypes to enterprise clusters.</p>
+        </div>
+
+        <div class="grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;">
+            <!-- Starter Tier -->
+            <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column;">
+                <h3 style="font-size: 1.3rem; font-weight: 700; margin: 0 0 0.5rem 0;">Starter</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem;">Perfect for small teams and bootstrapped projects.</p>
+                <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem;">$29 <span style="font-size: 0.9rem; color: #64748b; font-weight: 400;">/ month</span></div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1; font-size: 0.9rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Up to 5 Developer Seats</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> 100 Build Hours / Mo</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Standard CI/CD Pipelines</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Community Support</li>
+                </ul>
+                <button onclick="openModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">Get Started</button>
+            </div>
+
+            <!-- Pro Tier (Featured) -->
+            <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column; border-color: rgba(56, 189, 248, 0.5); background: rgba(30, 41, 59, 0.85); position: relative;">
+                <div style="position: absolute; top: -12px; right: 20px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">Most Popular</div>
+                <h3 style="font-size: 1.3rem; font-weight: 700; margin: 0 0 0.5rem 0; color: #38bdf8;">Pro Platform</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem;">Designed for growing engineering organizations.</p>
+                <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem;">$99 <span style="font-size: 0.9rem; color: #64748b; font-weight: 400;">/ month</span></div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1; font-size: 0.9rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Up to 25 Developer Seats</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Unlimited Build Minutes</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Multi-Cloud IaC Engine</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Real-time Observability</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Priority 24/7 Support</li>
+                </ul>
+                <button onclick="openModal()" style="width: 100%; background: linear-gradient(135deg, #0ea5e9, #6366f1); border: none; color: #fff; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 14px rgba(14, 165, 233, 0.4);">Start 14-Day Trial</button>
+            </div>
+
+            <!-- Enterprise Tier -->
+            <div class="glass-card" style="padding: 2rem; display: flex; flex-direction: column;">
+                <h3 style="font-size: 1.3rem; font-weight: 700; margin: 0 0 0.5rem 0;">Enterprise</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 1.5rem;">Custom governance & scale for high-security environments.</p>
+                <div style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem;">Custom</div>
+                <ul style="list-style: none; padding: 0; margin: 0 0 2rem 0; flex-grow: 1; font-size: 0.9rem; color: #cbd5e1; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Unlimited Seats</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Dedicated On-Prem Hybrid Runner</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Custom SSO & SAML</li>
+                    <li><i class="fa-solid fa-check" style="color: #34d399; margin-right: 0.5rem;"></i> Dedicated Solutions Architect</li>
+                </ul>
+                <button onclick="openModal()" style="width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Contact Sales</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Call-To-Action Footer Banner -->
+    <section style="padding: 4rem 1.5rem; max-width: 1200px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, rgba(14,165,233,0.2) 0%, rgba(139,92,246,0.2) 100%); border: 1px solid rgba(56,189,248,0.3); border-radius: 24px; padding: 3.5rem 2.5rem; text-align: center; position: relative; overflow: hidden;">
+            <h2 style="font-size: 2.2rem; font-weight: 800; margin: 0 0 1rem 0;">Ready to Accelerate Your Delivery Pipeline?</h2>
+            <p style="color: #cbd5e1; max-width: 550px; margin: 0 auto 2rem auto; font-size: 1.05rem;">Join over 2,000+ engineering teams already deploying smoother code with CloudPulse.</p>
+            <button onclick="openModal()" style="background: #ffffff; color: #0f172a; border: none; padding: 0.9rem 2.2rem; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 20px rgba(255,255,255,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                Get Started Free Today
+            </button>
+        </div>
+    </section>
+
+    <!-- Sleek Footer Section -->
+    <footer style="background: #070a12; border-top: 1px solid rgba(255,255,255,0.08); padding: 4rem 1.5rem 2rem 1.5rem;">
+        <div style="max-width: 1200px; margin: 0 auto;" class="grid-4" style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 3rem;">
+            <!-- Brand Column -->
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                    <div style="width: 32px; height: 32px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-cloud" style="color: #ffffff; font-size: 1rem;"></i>
+                    </div>
+                    <span style="font-size: 1.2rem; font-weight: 800; color: #fff;">CloudPulse</span>
+                </div>
+                <p style="color: #64748b; font-size: 0.85rem; max-width: 280px; margin-bottom: 1.5rem;">Next-generation autonomous DevOps and cloud infrastructure orchestration platform.</p>
+                <div style="display: flex; gap: 1rem; color: #64748b;">
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#64748b'"><i class="fa-brands fa-github" style="font-size: 1.2rem;"></i></a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#64748b'"><i class="fa-brands fa-x-twitter" style="font-size: 1.2rem;"></i></a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#38bdf8'" onmouseout="this.style.color='#64748b'"><i class="fa-brands fa-linkedin" style="font-size: 1.2rem;"></i></a>
+                </div>
+            </div>
+
+            <!-- Product Links -->
+            <div>
+                <h4 style="color: #f8fafc; font-size: 0.95rem; font-weight: 700; margin: 0 0 1rem 0;">Product</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem;">
+                    <a href="#features" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">CI/CD Automation</a>
+                    <a href="#features" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">Infrastructure as Code</a>
+                    <a href="#features" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">Observability</a>
+                    <a href="#pricing" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">Pricing Plans</a>
+                </div>
+            </div>
+
+            <!-- Resources Links -->
+            <div>
+                <h4 style="color: #f8fafc; font-size: 0.95rem; font-weight: 700; margin: 0 0 1rem 0;">Resources</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem;">
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">Documentation</a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">API Reference</a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">DevOps Blog</a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">System Status</a>
+                </div>
+            </div>
+
+            <!-- Company Links -->
+            <div>
+                <h4 style="color: #f8fafc; font-size: 0.95rem; font-weight: 700; margin: 0 0 1rem 0;">Company</h4>
+                <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.85rem;">
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">About Us</a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">Careers</a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">Privacy Policy</a>
+                    <a href="#" style="color: #64748b; text-decoration: none;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#64748b'">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="max-width: 1200px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #475569; flex-wrap: wrap; gap: 1rem;">
+            <div>&copy; 2026 CloudPulse Technologies Inc. All rights reserved.</div>
+            <div>Built for Cloud & DevOps Engineers worldwide.</div>
+        </div>
+    </footer>
+
+    <!-- Interactive Login / Sign In Modal Dialog -->
+    <div id="loginModal" style="display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(3, 7, 18, 0.8); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 1.5rem; animation: fadeIn 0.25s ease-out;">
+        <div class="glass-card" style="width: 100%; max-width: 420px; background: #0f172a; padding: 2.2rem; border-radius: 20px; border: 1px solid rgba(56, 189, 248, 0.3); position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <!-- Close Button -->
+            <button onclick="closeModal()" style="position: absolute; top: 1.2rem; right: 1.2rem; background: transparent; border: none; color: #64748b; font-size: 1.2rem; cursor: pointer;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#64748b'">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div style="text-align: center; margin-bottom: 1.8rem;">
+                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #0ea5e9, #8b5cf6); border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.75rem;">
+                    <i class="fa-solid fa-lock" style="color: #fff; font-size: 1.2rem;"></i>
+                </div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin: 0; color: #fff;">Welcome Back</h3>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.25rem;">Sign in to access your CloudPulse console</p>
+            </div>
+
+            <!-- Login Form -->
+            <form onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                <div>
+                    <label style="display: block; font-size: 0.85rem; color: #cbd5e1; font-weight: 500; margin-bottom: 0.4rem;">Work Email</label>
+                    <input type="email" required placeholder="alex@company.com" style="width: 100%; box-sizing: border-box; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 0.75rem 1rem; border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none;" onfocus="this.style.borderColor='#0ea5e9'" onblur="this.style.borderColor='rgba(255,255,255,0.15)'">
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                        <label style="font-size: 0.85rem; color: #cbd5e1; font-weight: 500;">Password</label>
+                        <a href="#" style="font-size: 0.8rem; color: #38bdf8; text-decoration: none;">Forgot?</a>
+                    </div>
+                    <input type="password" required placeholder="••••••••" style="width: 100%; box-sizing: border-box; background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(255,255,255,0.15); padding: 0.75rem 1rem; border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none;" onfocus="this.style.borderColor='#0ea5e9'" onblur="this.style.borderColor='rgba(255,255,255,0.15)'">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" style="background: linear-gradient(135deg, #0ea5e9, #6366f1); color: #fff; border: none; padding: 0.85rem; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; margin-top: 0.5rem; transition: opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    Sign In to Console
+                </button>
+            </form>
+
+            <!-- Social SSO Options -->
+            <div style="margin-top: 1.5rem; text-align: center;">
+                <div style="position: relative; margin-bottom: 1.2rem;">
+                    <div style="border-top: 1px solid rgba(255,255,255,0.1); width: 100%; position: absolute; top: 50%;"></div>
+                    <span style="background: #0f172a; position: relative; padding: 0 0.75rem; color: #64748b; font-size: 0.8rem;">Or continue with</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <button style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.6rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <i class="fa-brands fa-github"></i> GitHub
+                    </button>
+                    <button style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.6rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <i class="fa-brands fa-google"></i> Google
+                    </button>
+                </div>
+            </div>
+
+            <!-- Toast / Message Box Notification -->
+            <div id="loginNotification" style="display: none; margin-top: 1rem; padding: 0.75rem; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; border-radius: 8px; color: #34d399; font-size: 0.85rem; text-align: center;">
+                <i class="fa-solid fa-circle-check" style="margin-right: 0.4rem;"></i> Authentication successful! Redirecting...
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Vanilla JavaScript for Interactions -->
+    <script>
+        // Modal Control Functions
+        function openModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('loginNotification').style.display = 'none';
+        }
+
+        // Close modal when clicking outside box
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        };
+
+        // Mobile Menu Navigation Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Calculator Logic
+        function updateCalculations() {
+            const teamSize = parseInt(document.getElementById('teamSize').value);
+            const cloudSpend = parseInt(document.getElementById('cloudSpend').value);
+
+            // Dynamic Labels
+            document.getElementById('teamSizeVal').innerText = teamSize + ' Engineers';
+            document.getElementById('cloudSpendVal').innerText = '$' + cloudSpend.toLocaleString() + ' / mo';
+
+            // Savings Formulas
+            const cloudSavingsAnnual = cloudSpend * 12 * 0.30; // ~30% cost reduction
+            const devTimeHoursSaved = teamSize * 96; // ~96 hours saved per dev per year
+
+            document.getElementById('savingsResult').innerText = '$' + Math.round(cloudSavingsAnnual).toLocaleString();
+            document.getElementById('hoursSaved').innerText = Math.round(devTimeHoursSaved).toLocaleString() + ' hours';
+        }
+
+        // Mock Form Submission Handler
+        function handleLogin(event) {
+            event.preventDefault();
+            const notif = document.getElementById('loginNotification');
+            notif.style.display = 'block';
+            
+            setTimeout(() => {
+                closeModal();
+            }, 1800);
+        }
+    </script>
+</body>
+</html>
